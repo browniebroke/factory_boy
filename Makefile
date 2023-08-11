@@ -66,6 +66,10 @@ test:
 		-Wdefault:"'cgi' is deprecated and slated for removal in Python 3.13":DeprecationWarning:: \
 		-m unittest
 
+# Consider using pytest for entire test run (it just works)
+test-types:
+	pytest tests/typecheck --mypy-only-local-stub
+
 # DOC: Test the examples
 example-test:
 	$(MAKE) -C $(EXAMPLES_DIR) test
