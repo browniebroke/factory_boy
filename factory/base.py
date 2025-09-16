@@ -28,10 +28,10 @@ def resolve_attribute(name, bases, default=None):
     return default
 
 
-class FactoryMetaClass(type):
+class FactoryMetaClass(type[T]):
     """Factory metaclass for handling ordered declarations."""
 
-    def __call__(cls: type[T], **kwargs) -> T:
+    def __call__(cls, **kwargs) -> T:
         """Override the default Factory() syntax to call the default strategy.
 
         Returns an instance of the associated class.
@@ -47,7 +47,7 @@ class FactoryMetaClass(type):
             raise errors.UnknownStrategy('Unknown Meta.strategy: {}'.format(
                 cls._meta.strategy))
 
-    def __new__(mcs, class_name, bases, attrs) -> T:
+    def __new__(mcs, class_name, bases, attrs):
         """Record attributes as a pattern for later instance construction.
 
         This is called when a new Factory subclass is defined; it will collect
@@ -640,7 +640,7 @@ class BaseFactory(Generic[T]):
         return cls.generate_batch(strategy, size, **kwargs)
 
 
-class Factory(BaseFactory[T], metaclass=FactoryMetaClass):
+class Factory(BaseFactory[T], metaclass=FactoryMetaClass[T]):
     """Factory base with build and create support.
 
     This class has the ability to support multiple ORMs by using custom creation
